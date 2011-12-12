@@ -20,6 +20,11 @@ class Client(object):
         self.client.CreateFilter(self.user, **kwargs)
 
 if __name__ == '__main__':
+    extra = '''
+EMAIL: your google account email address
+ACTION: currently only 'create' is implemented
+'''
+
     p = optparse.OptionParser(usage='%prog EMAIL ACTION [options]')
     p.add_option('-f', '--from-address', dest='from_address', metavar='ADDR',
                  help='filter by source email address')
@@ -45,7 +50,9 @@ if __name__ == '__main__':
         email = sys.argv[1]
         action = sys.argv[2]
     except IndexError:
-        p.error('must include EMAIL and ACTION')
+        p.print_help()
+        print extra
+        sys.exit(1)
 
     opts, args = p.parse_args(sys.argv[3:])
 
@@ -63,5 +70,5 @@ if __name__ == '__main__':
 
         c.create_filter(**kwargs)
     else:
-        p.error('unknown action')
+        p.error('unknown action, expected [create]')
 
